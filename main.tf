@@ -32,23 +32,32 @@ module "security_group" {
     {
       from_port   = 2302
       to_port     = 2306
-      protocol    = "tcp"
+      protocol    = "udp"
       cidr_blocks = "0.0.0.0/0"
       description = "ArmA III Server"
     },
     {
-      from_port   = 3389
-      to_port     = 3389
+      from_port   = 22
+      to_port     = 22
       protocol    = "tcp"
       cidr_blocks = "${var.server_manager_ip}/32"
-      description = "RDP TCP"
+      description = "SSH"
     },
     {
-      from_port   = 3389
-      to_port     = 3389
-      protocol    = "udp"
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
       cidr_blocks = "${var.server_manager_ip}/32"
-      description = "RDP UDP"
+      description = "arma-server-manager"
+    },
+  ]
+  egress_with_cidr_blocks = [
+    {
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = "0.0.0.0/0"
+      ipv6_cidr_blocks = "::/0"
     },
   ]
 
@@ -59,7 +68,7 @@ module "ec2_instance" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
   name = "${var.server_name}-ec2"
-  ami  = "ami-03cd80cfebcbb4481"
+  ami  = "ami-058bd2d568351da34"
 
   instance_type = "c6a.xlarge"
   root_block_device = [
