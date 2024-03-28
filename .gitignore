@@ -21,6 +21,7 @@ crash.*.log
 
 # Exe
 *.exe
+*.zip
 
 # Backend
 *backend.tf
