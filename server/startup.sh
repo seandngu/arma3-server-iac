@@ -15,8 +15,11 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update --assume-yes
 
+# Install Docker
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin --assume-yes
+
 # Create TeamSpeak server
-sudo docker compose -file="server/teamspeak/compose.yml" up -d
+sudo docker compose --file="server/teamspeak/compose.yml" up -d
 
 # Create arma-web-server
 sudo docker compose --file="server/arma-server-manager/compose.yml" up -d

@@ -4,3 +4,11 @@ if (-not [System.IO.File]::Exists(".\terraform.exe")) {
 }
 .\terraform.exe -chdir="./infra" init 
 .\terraform.exe -chdir="./infra" apply -auto-approve
+
+$output = .\terraform.exe -chdir="./infra" output -json | ConvertFrom-Json
+$key = $output.ec2_information.value.key_name + ".pem"
+$server = "admin@" + $output.ec2_information.value.domain_name
+$scp_directory = $server + ":~/server"
+
+scp -o StrictHostKeyChecking=accept-new -r -i $key server $scp_directory
+ssh -o StrictHostKeyChecking=accept-new -i $key $server "sudo sh server/startup.sh"

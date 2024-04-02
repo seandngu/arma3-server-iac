@@ -19,6 +19,11 @@ data "aws_ami" "debian" {
   }
 }
 
+data "aws_instance" "default" {
+  instance_id = module.ec2_instance.id
+  depends_on = [ module.ec2_instance ]
+}
+
 resource "aws_default_vpc" "default" {
 }
 
@@ -97,6 +102,13 @@ module "ec2_instance" {
   monitoring             = true
   vpc_security_group_ids = ["${module.security_group.security_group_id}"]
 
-  depends_on = [module.security_group]
+  depends_on = [ module.security_group ]
 
+}
+
+resource "aws_ec2_instance_state" "default" {
+  instance_id = module.ec2_instance.id
+  state       = "running"
+
+  depends_on = [ module.ec2_instance ]
 }

@@ -1,7 +1,9 @@
 output "ec2_information" {
   value = {
-    public_ip   = module.ec2_instance.public_ip
-    domain_name = module.ec2_instance.public_dns
-    key_name    = module.ec2_instance.key_name
+    public_ip   = data.aws_instance.default.public_ip
+    domain_name = data.aws_instance.default.public_dns
+    key_name = data.aws_instance.default.key_name
   }
+
+  depends_on = [ resource.aws_ec2_instance_state.default ]
 }
